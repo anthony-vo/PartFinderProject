@@ -7,7 +7,7 @@ $dotenv->load();
 
 // Set variables
 $host = $_ENV['DB_HOST'];
-$databse = $_ENV['DB_NAME'];
+$database = $_ENV['DB_NAME'];
 $user = $_ENV['DB_USER'];
 $password = $_ENV['DB_PASS'];
 
@@ -18,6 +18,6 @@ try {
   $pdo = new PDO($dsn, $user, $password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,]);
 } catch (PDOEXCEPTION $e) {
   http_response_code(500);
-  echo json_encode(['Error' => 'Database connection failed']);
+  echo json_encode(['Error' => 'Database connection failed','message' => $e->getMessage()]);
   exit;
 }
