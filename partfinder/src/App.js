@@ -1,8 +1,19 @@
-import React, { useContext } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  Container,
+  Row,
+  Col,
+  CardBody,
+  CardFooter,
+  Card,
+  Button,
+} from "react-bootstrap";
 import { FilterProvider, Context } from "./Context";
 import Dropdown from "./components/Dropdown";
 import PartList from "./components/PartList";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import { FaSearch } from "react-icons/fa";
 
 function CascadingFilter() {
   const { state, dispatch } = useContext(Context);
@@ -45,16 +56,51 @@ function CascadingFilter() {
   );
 }
 
+function SearchContent() {
+  const { state } = useContext(Context);
+  const [results, setShowResults] = useState(false);
+
+  useEffect(() => {
+    setShowResults(false);
+  }, [state.make, state.model, state.type]);
+
+  return (
+    <Card className="search-panel bg-light rounded shadow-sm mb-4">
+      <CardBody>
+        <CascadingFilter />
+        {results && (
+          <div className="part-list mt-4">
+            <PartList />
+          </div>
+        )}
+      </CardBody>
+
+      <CardFooter className="d-flex justify-content-end bg-white">
+        <Button className="btn-custom" onClick={() => setShowResults(true)}>
+          <FaSearch width={20} height={20} className="me-2" />
+          Search
+        </Button>
+      </CardFooter>
+    </Card>
+  );
+}
+
 function App() {
   return (
-    <FilterProvider>
-      <Container fluid className="p-4">
-        <h1 className="mb-4">Part Finder</h1>
-        <CascadingFilter />
-        <hr />
-        <PartList />
-      </Container>
-    </FilterProvider>
+    <div className="d-flex flex-column" style={{ minHeight: "100vh" }}>
+      <Header />
+      <main className="flex-grow-1">
+        <Container fluid className="text-center mb-4 display-5">
+          <h1 className="page-title text-center mb-4 display-5">
+            Your Trusted Car Parts Wholesaler
+          </h1>
+          <FilterProvider>
+            <SearchContent />
+          </FilterProvider>
+        </Container>
+      </main>
+      <Footer />
+    </div>
   );
 }
 
