@@ -20,12 +20,13 @@ CREATE TABLE parts (
 );
 ```
 
+- Indexes scan instead of whole table scan was implemented to speed up the process.
 - Test-data excel file was converted to csv file prior importing to the database via phpmyadmin file import.
 
 ### config.php:
 
 - This is the central place where secure database connection was setup.
-- For security purposes, database credentials were kept out of the version control by using vlucas/phpdotenv. .env file was placed in gitignore to keep out of the version control.
+- For security purposes, database credentials were kept out by using vlucas/phpdotenv. .env file was placed in gitignore to keep out of the version control.
 - PDO was opted instead of mysqli\_\* API for the following reasons:
   - PDO provides prepared statements with boundaries param => guards against SQL injection.
   - PDO supposts many database engines => enhances scalability and compatibility.
@@ -52,8 +53,16 @@ CREATE TABLE parts (
   - On `make` change => fetch all models.
   - On `model` change => fetch all types.
   - On `type` change => fetch all parts.
-- each of the dispatch is constructed as : `SET_LOAD(true)` then `SET_DATA` then `SET_LOAD(false)`.
+- each of the useEffect is constructed as : `SET_LOAD(true)` then `SET_DATA` then `SET_LOAD(false)`.
 - Due to the amount of states, I opted to use `useReducer` instead of `useState` to centralise all updates in on place instead of having a bunch of setters and effect clean up to keep the downstream filters consistently. This helps with code efficiency and avoids partial state values updates => Scalability.
 - `React Context` was implemented to avoid extensive prop drilling as the tree expands. Since we have many components that require the same state and dispatch function, Context provides the `{ state, dispatch }` at the top level so any intermediate components can consume it.
 - `Context and Reducer` combine to provide a global store, ensuring every part of the UI is consistent and reflects the same state.
 - Can easily add new components => Scalability
+
+**_ Resources _**
+
+# React's useReducer: https://reactjs.org/docs/hooks-reference.html#usereducer
+
+# React's useContext: https://reactjs.org/docs/hooks-reference.html#usecontext
+
+# PHP's PDO: https://www.php.net/manual/en/book.pdo.php
