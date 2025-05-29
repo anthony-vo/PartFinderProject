@@ -43,7 +43,7 @@ export default function PartList() {
         <thead>
           <tr>
             <th>Model</th>
-            <th>Available Types</th>
+            <th>Available Parts</th>
           </tr>
         </thead>
         <tbody>
